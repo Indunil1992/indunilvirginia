@@ -9,7 +9,7 @@ exports.handler = function (event, context, callback) {
         AttributeNames: ['All'],
         MaxNumberOfMessages: '10',
         VisibilityTimeout: '300',
-        WaitTimeSeconds: '100',
+        WaitTimeSeconds: '10',
         MessageAttributeNames: ['sa', 'saa']
     }).promise()
         .then(receivedMsgData => {
