@@ -22,7 +22,7 @@
         "children": [],
         "isRemovable": true,
         "filePath": "indunilvirginia/lambda.js",
-        "code": "let AWS = require('aws-sdk');\nlet SL_AWS = require('slappforge-sdk-aws');\nconst sqs = new SL_AWS.SQS(AWS);\n\nexports.handler = function (event, context, callback) {\n\n    sqs.receiveMessage({\n        QueueUrl: `https://sqs.${process.env.AWS_REGION}.amazonaws.com/${process.env.SIGMA_AWS_ACC_ID}/testdemo`,\n        AttributeNames: ['All'],\n        MaxNumberOfMessages: '10',\n        VisibilityTimeout: '30',\n        WaitTimeSeconds: '0'\n    }).promise()\n        .then(receivedMsgData => {\n            if (!!(receivedMsgData) && !!(receivedMsgData.Messages)) {\n                let receivedMessages = receivedMsgData.Messages;\n                receivedMessages.forEach(message => {\n                     console.log(\"Success with message\");\n                 console.log( message );\n                    // your logic to access each message through out the loop. Each message is available under variable message \n                    // within this block\n                });\n            } else {\n                 console.log(\"Success\");\n                 //console.log( data );\n                // No messages to process\n            }\n        })\n        .catch(err => {\n             console.log(\"Success with err\");\n                 console.log( err );\n            // error handling goes here\n        });\n\n\n\n\n    callback(null, { \"message\": \"Successfully executed get \" });\n}",
+        "code": "let AWS = require('aws-sdk');\nlet SL_AWS = require('slappforge-sdk-aws');\nconst sqs = new SL_AWS.SQS(AWS);\n\nexports.handler = function (event, context, callback) {\n    sqs.receiveMessage({\n        QueueUrl: `https://sqs.${process.env.AWS_REGION}.amazonaws.com/${process.env.SIGMA_AWS_ACC_ID}/demoindu.fifo`,\n        AttributeNames: ['All'],\n        MaxNumberOfMessages: '10',\n        VisibilityTimeout: '30',\n        WaitTimeSeconds: '0'\n    }).promise()\n        .then(receivedMsgData => {\n            if (!!(receivedMsgData) && !!(receivedMsgData.Messages)) {\n                let receivedMessages = receivedMsgData.Messages;\n                receivedMessages.forEach(message => {\n                     console.log(\"Success with message \");\n                 console.log( data );\n                    // your logic to access each message through out the loop. Each message is available under variable message \n                    // within this block\n                });\n            } else {\n                 console.log(\"Success with no msg\");\n                 //console.log( data );\n                // No messages to process\n            }\n        })\n        .catch(err => {\n             console.log(\"not Success\");\n                 console.log( err );\n            // error handling goes here\n        });\n\n\n\n    callback(null, { \"message\": \"Successfully executed with nw fifo \" });\n}",
         "config": {
           "runtime": "nodejs8.10",
           "handler": "handler",
@@ -80,14 +80,14 @@
           "mode": 1
         }
       },
-      "sqstestdemo": {
-        "name": "sqstestdemo",
+      "sqsdemoindufifo": {
+        "name": "sqsdemoindufifo",
         "type": "SQS",
         "config": {
           "mode": 0,
           "existing": false,
-          "name": "testdemo",
-          "url": "https://sqs.us-east-1.amazonaws.com/318300609668/testdemo",
+          "name": "demoindu.fifo",
+          "url": "https://sqs.us-east-1.amazonaws.com/318300609668/demoindu.fifo",
           "selectedRegion": "us-east-1",
           "deliveryDelay": 0,
           "deliveryDelayUnit": "seconds",
@@ -96,15 +96,14 @@
           "kmsCustomerMasterKey": "default",
           "accountId": "318300609668",
           "dataKeyReusePeriod": 5,
-          "queueType": "standardQueue",
+          "queueType": "fifoQueue",
           "defaultVisibilityTimeout": 30,
           "defaultVisibilityTimeoutUnit": "seconds",
           "messageRetentionPeriod": 4,
           "messageRetentionPeriodUnit": "days",
           "maximumMessageSize": 256,
           "receiveMessageWaitTime": 0,
-          "deadLetterQueueName": "",
-          "contentBasedDeduplication": false
+          "deadLetterQueueName": ""
         }
       }
     },
@@ -148,7 +147,7 @@
     "projectRegion": "us-east-1",
     "platform": "AWS",
     "platformRegions": {},
-    "lastSave": 1562733780098
+    "lastSave": 1562735004648
   },
   "VCS_STATE": {
     "provider": "GitHub",
