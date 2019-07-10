@@ -15,14 +15,20 @@ exports.handler = function (event, context, callback) {
             if (!!(receivedMsgData) && !!(receivedMsgData.Messages)) {
                 let receivedMessages = receivedMsgData.Messages;
                 receivedMessages.forEach(message => {
+                    console.log("Success");
+                 console.log( message );
                     // your logic to access each message through out the loop. Each message is available under variable message 
                     // within this block
                 });
             } else {
+                console.log("No messages to Success");
+                 //console.log( data );
                 // No messages to process
             }
         })
         .catch(err => {
+            console.log("not Success");
+                 console.log( err );
             // error handling goes here
         });
 
