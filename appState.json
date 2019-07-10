@@ -22,7 +22,7 @@
         "children": [],
         "isRemovable": true,
         "filePath": "indunilvirginia/lambda.js",
-        "code": "let AWS = require('aws-sdk');\nlet SL_AWS = require('slappforge-sdk-aws');\nconst sqs = new SL_AWS.SQS(AWS);\n\nexports.handler = function (event, context, callback) {\n    sqs.receiveMessage({\n        QueueUrl: `https://sqs.${process.env.AWS_REGION}.amazonaws.com/${process.env.SIGMA_AWS_ACC_ID}/demoindu.fifo`,\n        AttributeNames: ['All'],\n        MaxNumberOfMessages: '10',\n        VisibilityTimeout: '30',\n        WaitTimeSeconds: '0'\n    }).promise()\n        .then(receivedMsgData => {\n            if (!!(receivedMsgData) && !!(receivedMsgData.Messages)) {\n                let receivedMessages = receivedMsgData.Messages;\n                receivedMessages.forEach(message => {\n                     console.log(\"Success with message \");\n                 console.log( data );\n                    // your logic to access each message through out the loop. Each message is available under variable message \n                    // within this block\n                });\n            } else {\n                 console.log(\"Success with no msg\");\n                 //console.log( data );\n                // No messages to process\n            }\n        })\n        .catch(err => {\n             console.log(\"not Success\");\n                 console.log( err );\n            // error handling goes here\n        });\n\n\n\n    callback(null, { \"message\": \"Successfully executed with nw fifo \" });\n}",
+        "code": "let AWS = require('aws-sdk');\nlet SL_AWS = require('slappforge-sdk-aws');\nconst sqs = new SL_AWS.SQS(AWS);\n\nexports.handler = function (event, context, callback) {\n\n    sqs.receiveMessage({\n        QueueUrl: `https://sqs.${process.env.AWS_REGION}.amazonaws.com/${process.env.SIGMA_AWS_ACC_ID}/gettest.fifo`,\n        AttributeNames: ['All'],\n        MaxNumberOfMessages: '100',\n        VisibilityTimeout: '300',\n        WaitTimeSeconds: '100',\n        MessageAttributeNames: ['sa', 'saa']\n    }).promise()\n        .then(receivedMsgData => {\n            if (!!(receivedMsgData) && !!(receivedMsgData.Messages)) {\n                let receivedMessages = receivedMsgData.Messages;\n                receivedMessages.forEach(message => {\n                    // your logic to access each message through out the loop. Each message is available under variable message \n                    // within this block\n                     console.log(\"message Success\");\n                 console.log( message );\n                });\n            } else {\n                 console.log(\"Success\");\n                 //console.log( data );\n                // No messages to process\n            }\n        })\n        .catch(err => {\n             console.log(\"err happend\");\n                 console.log( err );\n            // error handling goes here\n        });\n\n\n\n\n    callback(null, { \"message\": \"Successfully executed with get\" });\n}",
         "config": {
           "runtime": "nodejs8.10",
           "handler": "handler",
@@ -39,6 +39,12 @@
         "testCases": {
           "6f803dc2-51d7-4f2d-aec0-481f2aefb94d": {
             "id": "6f803dc2-51d7-4f2d-aec0-481f2aefb94d",
+            "name": "Unnamed event",
+            "functionId": "1ae4fc93-e2ba-4d4b-85cb-bbe6644dda44",
+            "event": "{\n    \"key1\": \"value1\",\n    \"key2\": \"value2\",\n    \"key3\": \"value3\"\n}"
+          },
+          "4c624eae-81b5-47b4-9b6b-6afb26abf755": {
+            "id": "4c624eae-81b5-47b4-9b6b-6afb26abf755",
             "name": "Unnamed event",
             "functionId": "1ae4fc93-e2ba-4d4b-85cb-bbe6644dda44",
             "event": "{\n    \"key1\": \"value1\",\n    \"key2\": \"value2\",\n    \"key3\": \"value3\"\n}"
@@ -80,14 +86,14 @@
           "mode": 1
         }
       },
-      "sqsdemoindufifo": {
-        "name": "sqsdemoindufifo",
+      "sqsgettestfifo": {
+        "name": "sqsgettestfifo",
         "type": "SQS",
         "config": {
           "mode": 0,
           "existing": false,
-          "name": "demoindu.fifo",
-          "url": "https://sqs.us-east-1.amazonaws.com/318300609668/demoindu.fifo",
+          "name": "gettest.fifo",
+          "url": "https://sqs.us-east-1.amazonaws.com/318300609668/gettest.fifo",
           "selectedRegion": "us-east-1",
           "deliveryDelay": 0,
           "deliveryDelayUnit": "seconds",
@@ -103,7 +109,8 @@
           "messageRetentionPeriodUnit": "days",
           "maximumMessageSize": 256,
           "receiveMessageWaitTime": 0,
-          "deadLetterQueueName": ""
+          "deadLetterQueueName": "",
+          "contentBasedDeduplication": false
         }
       }
     },
@@ -147,7 +154,7 @@
     "projectRegion": "us-east-1",
     "platform": "AWS",
     "platformRegions": {},
-    "lastSave": 1562735004648
+    "lastSave": 1562736905716
   },
   "VCS_STATE": {
     "provider": "GitHub",
